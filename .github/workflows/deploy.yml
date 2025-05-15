@@ -1,0 +1,43 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  HEXO_DEPLOY_PAT: ${{secrets.HEXO_DEPLOY_PAT}}
+  GIT_HTTPS_URL: https://github.com/tangchenyang/tangchenyang.github.io.git
+  GIT_USER_NAME: chenyang.tang
+  GIT_USER_EMAIL: gteeice@163.com
+  ENABLE_WEB_STATISTICS: true
+  ENABLE_COMMENTS: true
+  HEXO_LEANCLOUD_APP_ID: ${{secrets.HEXO_LEANCLOUD_APP_ID}}
+  HEXO_LEANCLOUD_APP_KEY: ${{secrets.HEXO_LEANCLOUD_APP_KEY}}
+  HEXO_LEANCLOUD_APP_SERVER_URL: ${{secrets.HEXO_LEANCLOUD_APP_SERVER_URL}}
+
+jobs:
+  build:
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [16.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.11.0
+
+      - name: Setup Hexo
+        run: |
+          bash scripts/hexo-setup.sh
+
+      - name: Deploy Site
+        run: |
+          bash scripts/hexo-deploy.sh

@@ -6,7 +6,7 @@ HEXO_HOME="$PROJECT_DIR"/hexo-home
 install_hexo() {
   hexo v || (echo "Hexo is not installed. Installing now..." && npm install -g hexo-cli)
   cd "$PROJECT_DIR" && hexo init hexo-home
-  cd hexo-home && npm install
+  cd hexo-home && npm install && rm -f source/_posts/hello-world.md
 }
 
 setup_web_statistics() {

@@ -22,15 +22,18 @@ categories:
 
 我们先来准备一个 `chat` 方法，以便我们能够与OpenAI进行交互。   
 ```python
-from openai import OpenAI
+BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1" # 阿里云的 API 地址
+API_KEY="***" # 替换为你的 API KEY
+MODEL="qwen-turbo-latest"
 
+from openai import OpenAI
+client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 def chat(message):
-    client = OpenAI(base_url="https://api.deepseek.com")
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model=MODEL,
         messages=[
-            {"role": "user", "content": """{message}""".format(message=message)}
+            {"role": "user", "content": message}
         ],
     )
     response_content = response.choices[0].message.content
@@ -64,7 +67,7 @@ AI 帮我们生成了这个结果：
 如果我们想让AI的回答更符合我们的期望，我们需要把 `心里话` 说出来，提供更多的细节和信息，比如：  
 
 ```python
-print(chat("帮我写一首关于春天的五言律诗，表达一切刚刚开始，作者发自内心的喜悦和激动，以及对未来美好生活的憧憬。"))
+print(chat("帮我写一首关于春天的五言律诗，表达一切刚刚开始，作者发自内心的喜悦和激动，以及对未来美好生活的憧憬。诗的名字用书名号括起来"))
 ```
 AI 的回答：
 

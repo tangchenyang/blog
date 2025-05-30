@@ -82,7 +82,7 @@ OpenAI 是与大语言模型交互的 API，但是大语言模型是由各个厂
 ## 3 与 AI 对话
 Python 环境准备好了，API KEY 也申请好了，接下来就可以与 OpenAI 进行交互了。 我们先回到前面打开的 Notebook 页面中，准备运行我们的AI代码。 
 
-首先需要导入 `openai` 库，然后创建一个 `OpenAI` 的客户端：在 Notebook 中输入以下代码片段，并按 Shift + 回车执行
+1. 首先需要导入 `openai` 库，然后创建一个 `OpenAI` 的客户端：在 Notebook 中输入以下代码片段，并按 Shift + 回车执行
 ```python
 BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1" # 阿里云的 API 地址
 API_KEY="***" # 替换为你的 API KEY
@@ -96,23 +96,30 @@ print(client)
 <openai.OpenAI object at 0x10952b790>
 ```
 
-然后我们使用阿里的 `通义千问-Turbo (qwen-turbo-latest)` 模型来发起一个对话，向 AI 发送打招呼的消息 "你好"
+2. 然后我们使用阿里的 `通义千问-Turbo (qwen-turbo-latest)` 模型来发起一个对话，向 AI 发送打招呼的消息 "你好"
 
 ```python
 MODEL="qwen-turbo-latest"
-
+response = client.chat.completions.create(
+    model=MODEL,
+    messages=[
+        {"role": "user", "content": "你好"}
+    ],
+)
+response_content = response.choices[0].message.content
+print(response_content)
 ```
 我们将会看到AI的回答，比如：
 ```text
 你好！很高兴见到你。有什么我可以帮你的吗？😊
 ```
 
-
-为了方便我们向AI发送不同的消息，我们可以上面的代码封装成一个 chat 函数，函数的输入是我们发送给 AI 的消息，函数的返回值是 AI 的回复。   
+3. 为了方便我们向AI发送不同的消息，我们可以上面的代码封装成一个 chat 函数，函数的输入是我们发送给 AI 的消息，函数的返回值是 AI 的回复。   
 
 ```python
 BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1" # 阿里云的 API 地址
 API_KEY="***" # 替换为你的 API KEY
+MODEL="qwen-turbo-latest"
 
 from openai import OpenAI
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
